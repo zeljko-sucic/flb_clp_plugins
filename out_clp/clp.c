@@ -193,8 +193,8 @@ static void get_output_file(struct flb_clp_conf *ctx,struct flb_event_chunk *eve
                      ctx->out_path, ctx->out_file);
         }
         else {
-            snprintf(out_file, PATH_MAX - 1, "%s/%s_%s_%s",
-                     ctx->out_path, event_chunk->tag,ctx->hostname,buff);
+            snprintf(out_file, PATH_MAX - 1, "%s/%s_%s",
+                     ctx->out_path, event_chunk->tag, buff);
         }
     }
     else {
@@ -202,7 +202,7 @@ static void get_output_file(struct flb_clp_conf *ctx,struct flb_event_chunk *eve
             snprintf(out_file, PATH_MAX - 1, "%s", ctx->out_file);
         }
         else {
-            snprintf(out_file, PATH_MAX - 1, "%s_%s_%s", event_chunk->tag,ctx->hostname,buff);
+            snprintf(out_file, PATH_MAX - 1, "%s_%s", event_chunk->tag, buff);
         }
     }
 
