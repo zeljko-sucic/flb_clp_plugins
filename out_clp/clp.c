@@ -48,13 +48,13 @@
 #define TIME_STR_FORMAT "%Y-%m-%dT%H:%M:%S"
 #define TIME_FOR_LOG_NAME_FORMAT "%Y%m%d%H%M.log"
 
-#define HOSTNAME_SIZE 256
+//#define HOSTNAME_SIZE 256
 
 struct flb_clp_conf {
     const char *out_path;
     const char *out_file;
     const char *delimiter;
-    const char *hostname;
+    //const char *hostname;
     struct flb_output_instance *ins;
 };
 
@@ -78,7 +78,7 @@ static char *check_delimiter(const char *str)
 }
 
 
-
+/*
 static char* getLocalHostname() {
     static char hostname[HOSTNAME_SIZE];
 
@@ -88,7 +88,7 @@ static char* getLocalHostname() {
     }
 
     return hostname;
-}
+}*/
 static int cb_clp_init(struct flb_output_instance *ins,
                         struct flb_config *config,
                         void *data)
@@ -107,7 +107,7 @@ static int cb_clp_init(struct flb_output_instance *ins,
     }
     ctx->ins = ins;
     ctx->delimiter = ",";
-    ctx->hostname=getLocalHostname();
+    //ctx->hostname=getLocalHostname();
 
     ret = flb_output_config_map_set(ins, (void *) ctx);
     if (ret == -1) {
@@ -321,11 +321,12 @@ static struct flb_config_map config_map[] = {
      0, FLB_FALSE, 0,
      "Set a custom delimiter for the records"
     },
+    /*
     {
      FLB_CONFIG_MAP_STR, "hostname", NULL,
      0, FLB_TRUE, offsetof(struct flb_clp_conf, hostname),
      "Name of the target hostname to name the log file"
-    },
+    },*/
     /* EOF */
     {0}
 };

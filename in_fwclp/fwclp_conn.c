@@ -74,7 +74,7 @@ int fwclp_conn_event(void *data)
                 flb_errno();
                 return -1;
             }
-            fprintf(stdout, "fd=%i buffer realloc %i -> %i\n",
+            flb_plg_debug(ctx->ins, "fd=%i buffer realloc %i -> %i\n",
                           event->fd, conn->buf_size, size);
             //flb_plg_trace(ctx->ins, "fd=%i buffer realloc %i -> %i",
             //              event->fd, conn->buf_size, size);
@@ -89,7 +89,7 @@ int fwclp_conn_event(void *data)
                                 available);
 
         if (bytes > 0) {
-            fprintf(stdout, "read()=%i pre_len=%i now_len=%i\n",
+            flb_plg_debug(ctx->ins, "read()=%i pre_len=%i now_len=%i\n",
                           bytes, conn->buf_len, conn->buf_len + bytes);
             //flb_plg_trace(ctx->ins, "read()=%i pre_len=%i now_len=%i",
             //              bytes, conn->buf_len, conn->buf_len + bytes);
@@ -103,7 +103,7 @@ int fwclp_conn_event(void *data)
             return bytes;
         }
         else {
-            fprintf(stdout,"fd=%i closed connection\n", event->fd);
+            flb_plg_debug(ctx->ins,"fd=%i closed connection\n", event->fd);
             //flb_plg_trace(ctx->ins, "fd=%i closed connection", event->fd);
             fwclp_conn_del(conn);
             return -1;
@@ -112,7 +112,7 @@ int fwclp_conn_event(void *data)
 
     if (event->mask & MK_EVENT_CLOSE) {
 
-        fprintf(stdout,"fd=%i hangup\n", event->fd);
+        flb_plg_debug(ctx->ins,"fd=%i hangup\n", event->fd);
         //flb_plg_trace(ctx->ins, "fd=%i hangup", event->fd);
         fwclp_conn_del(conn);
         return -1;

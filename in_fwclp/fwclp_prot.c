@@ -631,19 +631,19 @@ int fwclp_prot_process(struct flb_input_instance *ins, struct fwclp_conn *conn)
                 flb_sds_cat_safe(&out_tag, stag, stag_len);
 
                 flb_sds_cat_safe(&out_tag, tag_suffix,strlen(tag_suffix) );
-                //fprintf(stdout, "out_tag after catting with prefix: %s\n", out_tag);
+                //flb_plg_debug(ctx->ins, "out_tag after catting with prefix: %s\n", out_tag);
             }
             else if (ins->tag && !ins->tag_default) {
                 /* if the input plugin instance Tag has been manually set, use it */
                 flb_sds_cat_safe(&out_tag, ins->tag, flb_sds_len(ins->tag));
                 flb_sds_cat_safe(&out_tag, tag_suffix,strlen(tag_suffix));
-                //fprintf(stdout, "out_tag after catting manually: %s\n", out_tag);
+                //flb_plg_debug(ctx->ins, "out_tag after catting manually: %s\n", out_tag);
             }
             else {
                 /* use the tag from the record */
                 flb_sds_cat_safe(&out_tag, stag, stag_len);
                 flb_sds_cat_safe(&out_tag,tag_suffix,strlen(tag_suffix));
-                //fprintf(stdout, "out_tag after catting: %s\n", out_tag);
+                //flb_plg_debug(ctx->ins, "out_tag after catting: %s\n", out_tag);
             }
             flb_free(tag_suffix);
             entry = root.via.array.ptr[1];
@@ -860,7 +860,7 @@ int fwclp_prot_process(struct flb_input_instance *ins, struct fwclp_conn *conn)
         flb_plg_error(ctx->ins, "MSGPACK_UNPACK_EXTRA_BYTES");
         return -1;
     case MSGPACK_UNPACK_CONTINUE:
-        fprintf(stdout, "MSGPACK_UNPACK_CONTINUE");
+        flb_plg_debug(ctx->ins, "MSGPACK_UNPACK_CONTINUE");
         //flb_plg_trace(ctx->ins, "MSGPACK_UNPACK_CONTINUE");
         return 1;
     case MSGPACK_UNPACK_PARSE_ERROR:

@@ -113,8 +113,9 @@ static int fwclp_unix_create(struct flb_in_fwclp_config *ctx)
     return 0;
 }
 #endif
-static void get_remote_host(struct flb_connection * connection)
+static void get_remote_host(struct flb_connection * connection,  struct flb_in_fwclp_config *ctx)
 {
+
     struct sockaddr_storage addr;
     socklen_t addr_len = sizeof(addr);
     int result = getpeername(connection->fd, (struct sockaddr*)&addr, &addr_len);
@@ -123,18 +124,18 @@ static void get_remote_host(struct flb_connection * connection)
         struct sockaddr_in* sockaddr_ipv4 = (struct sockaddr_in*)&addr;
         char ip4[INET_ADDRSTRLEN];
         inet_ntop(AF_INET, &(sockaddr_ipv4->sin_addr), ip4, INET_ADDRSTRLEN);
-        printf("IPv4 Address: %s\n", ip4);
+        flb_plg_debug(ctx->ins, "IPv4 Address: %s\n", ip4);
         memcpy(connection->remote_host, ip4, INET_ADDRSTRLEN);
     } else if (addr.ss_family == AF_INET6) {
         // IPv6 address
         struct sockaddr_in6* sockaddr_ipv6 = (struct sockaddr_in6*)&addr;
         char ip6[INET6_ADDRSTRLEN];
         inet_ntop(AF_INET6, &(sockaddr_ipv6->sin6_addr), ip6, INET6_ADDRSTRLEN);
-        printf("IPv6 Address: %s\n", ip6);
+        flb_plg_debug(ctx->ins, "IPv6 Address: %s\n", ip6);
         memcpy(connection->remote_host, ip6, INET6_ADDRSTRLEN);
     } else {
         // Address family not supported or unknown
-        printf("Unknown address family\n");
+        flb_plg_error(ctx->ins,"Unknown address family\n");
     }
 
 }
@@ -167,13 +168,13 @@ static int in_fwclp_collect(struct flb_input_instance *ins,
     }
     if(strlen(connection->remote_host) == 0)
     {
-        get_remote_host(connection);
+        get_remote_host(connection, ctx);
     }
 
 
 
-    fprintf(stdout,"remote host:%s\n",connection->remote_host);
-    fprintf(stdout,  "new TCP connection arrived FD=%i\n", connection->fd);
+    flb_plg_debug(ctx->ins,"remote host:%s\n",connection->remote_host);
+    flb_plg_debug(ctx->ins,  "new TCP connection arrived FD=%i\n", connection->fd);
     //flb_plg_trace(ins, "new TCP connection arrived FD=%i", connection->fd);
 
     conn = fwclp_conn_add(connection, ctx);
